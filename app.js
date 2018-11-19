@@ -35,7 +35,7 @@ app.post('/', (req, res) => {
     
     if (hashed === pw.hash) {
         console.log('right pw');
-        res.cookie('chatkey', encryptKey, {maxAge: 600000, httpOnly:true, overwrite: true});
+        res.cookie('chatkey', encryptKey, {maxAge: 600000, httpOnly:false, overwrite: true});
         res.redirect('/chat');
     } else {
         console.log('wrong pw');
@@ -50,10 +50,13 @@ app.get('/chat', (req, res) => {
     res.render('chat');
 })
 
+let clients = {};
+
 io.on('connection', socket => {
     console.log('a user connected');
-    
+    clients[socket.id] = socket;
     socket.on('disconnect', () => {
+        delete clients[socket.id];
         console.log('user disconnected');
     });
     
