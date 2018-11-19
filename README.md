@@ -20,3 +20,13 @@ $ npm install
 ```
 $ npm start
 ```
+
+### Setting a login password
+
+The included `setpassword.js` script can be used to set the password that is checked by the server when a user wants to log in to the chat. It can be run as follows:
+
+```
+$ node setpassword.js --pw <password>
+```
+
+The salt and hash of the password will be written to `password.json` which the server will check against on login. If the password is changed, the server will need to be restarted.
