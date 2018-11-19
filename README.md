@@ -6,20 +6,14 @@ Christopher Tse, Charlie Liu, Zachary Connor
 
 ### Setting up the project
 
-1. Clone the project to your computer by downloading the zip or using git:  
+Clone the project to your computer by downloading the zip or using git. Install the required packages and run the server:  
 ```
 $ git clone https://github.com/chris-tse/encrypted-chat
-```
-
-2. Install required packages
-```
 $ npm install
-```
-
-3. Start the server
-```
 $ npm start
 ```
+
+You will need to set a password first before starting the server the first time. See instructions below.
 
 ### Setting a login password
 

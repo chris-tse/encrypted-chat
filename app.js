@@ -64,7 +64,19 @@ io.on('connection', socket => {
 
 
 http.listen(3001, () => {
-    let {salt, passwordHash: hash} = JSON.parse(fs.readFileSync('./password.json'));
+    let data;
+    try {
+        data = JSON.parse(fs.readFileSync('./password.json'));
+    } catch (err) {
+        if (err.code === 'ENOENT') {
+            console.log('`password.json` was not found. Run the setpassword script to generate it before starting the server.');
+            console.log();
+            console.log('Example:');
+            console.log('$ node setpassword --pw <password>');
+        }
+        return process.exit(0);
+    }
+    let {salt, passwordHash: hash} = data;
     Object.assign(pw, {salt, hash});
     encryptKey = crypto.randomBytes(7).toString('hex');
     console.log('Server running at http://127.0.0.1:' + 3001 + '/')
