@@ -1,0 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font: 16px Helvetica, Arial;
+    color: white;
+    background: #3a3a3a;
+}
+
+form {
+    padding: 3px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
