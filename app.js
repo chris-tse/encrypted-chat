@@ -76,7 +76,7 @@ io.on('connection', socket => {
 
 
 server.listen(port, () => {
-    setInterval(() => http.get('http://cs4173chat.herokuapp.com/'), 10000);
+    // setInterval(() => http.get('http://cs4173chat.herokuapp.com/'), 10000);
     let salt = cryptoUtil.genRandomString(64);
     if (process.env.PW == null || process.env.PW == '') {
         console.error('Set password with the PW environment variable');
