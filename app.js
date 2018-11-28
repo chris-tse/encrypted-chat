@@ -7,10 +7,13 @@ const cryptoUtil = require('./cryptoutil');
 const exphbs = require('express-handlebars');
 
 const app = express();
-const http = require('http').Server(app);
+const http = require('http');
+const server = http.Server(app);
 const io = require('socket.io')(http);
 
-setInterval(() => http.get('https://cs4173chat.herokuapp.com/'), 1000);
+setInterval(() => http.get('http://cs4173chat.herokuapp.com/'), 1000);
+
+let encryptKey;
 
 let port = process.env.PORT;
 if (port == null || port == "") {
@@ -26,7 +29,7 @@ app.use(bodyParser.urlencoded({limit: '5mb', extended: false, parameterLimit:300
 app.use(cookieParser());
 app.use(express.static('node_modules/crypto-js'));
 app.use(express.static('public'));
-let encryptKey;
+
 let pw = {};
 
 app.get('/', (req, res) => {
@@ -73,21 +76,15 @@ io.on('connection', socket => {
 });
 
 
-http.listen(port, () => {
-    let data;
-    try {
-        data = JSON.parse(fs.readFileSync('./password.json'));
-    } catch (err) {
-        if (err.code === 'ENOENT') {
-            console.log('`password.json` was not found. Run the setpassword script to generate it before starting the server.');
-            console.log();
-            console.log('Example:');
-            console.log('$ node setpassword --pw <password>');
-        }
-        return process.exit(0);
+server.listen(port, () => {    
+    let salt = cryptoUtil.genRandomString(64);
+    if (process.env.PW == null || process.env.PW == '') {
+        console.error('Set password with the PW environment variable');
+        return process.exit(1);
     }
-    let {salt, passwordHash: hash} = data;
+    let pass = process.env.PW;
+    let hash = cryptoUtil.saltHash(process.env.PW, salt).passwordHash;
     Object.assign(pw, {salt, hash});
     encryptKey = crypto.randomBytes(7).toString('hex');
-    console.log('Server running at http://127.0.0.1:' + 3001 + '/')
+    console.log('Server running at http://127.0.0.1:' + port + '/')
 });
