@@ -1,1 +1,1 @@
-web: PW=password node app.js
+web: node app.js
