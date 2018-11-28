@@ -10,6 +10,13 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+setInterval(() => http.get('https://cs4173chat.herokuapp.com/'), 1000);
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+    port = 8000;
+}
+
 app.set('view engine', 'hbs');
 app.engine('hbs', exphbs({
     extname: 'hbs'
@@ -66,7 +73,7 @@ io.on('connection', socket => {
 });
 
 
-http.listen(3001, () => {
+http.listen(port, () => {
     let data;
     try {
         data = JSON.parse(fs.readFileSync('./password.json'));
