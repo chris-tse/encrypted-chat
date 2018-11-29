@@ -9,7 +9,7 @@ const exphbs = require('express-handlebars');
 const app = express();
 const http = require('http');
 const server = http.Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(server);
 
 
 let encryptKey;
@@ -57,7 +57,7 @@ app.get('/chat', (req, res) => {
         return res.redirect('/');
     }
     res.render('chat');
-})
+});
 
 let clients = {};
 
@@ -70,7 +70,8 @@ io.on('connection', socket => {
     });
     
     socket.on('chat message', msg => {
-        console.log('message:', msg);
+        console.log(msg);
+        io.emit('chat message', msg);
     })
 });
 
