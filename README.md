@@ -1,5 +1,6 @@
-# CS 4173 Final Project
+# Totally Secure Chat
 
+### CS 4173 Final Project
 Christopher Tse, Charlie Liu, Zachary Connor
 
 ## Development
