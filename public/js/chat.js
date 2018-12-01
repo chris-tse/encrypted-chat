@@ -27,6 +27,15 @@ $(function () {
 
     let nickname = getCookie('nickname');
 
+    function encryptDES(message, key) {
+      var keyHex = CryptoJS.enc.Utf8.parse(key);
+      var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+      });
+      return encrypted.toString();
+    }
+
     function sendMessage() {
         let msg = $("#inputMessage").val();
         var encrypted = encryptDES(msg, getCookie('chatkey'));
@@ -36,15 +45,6 @@ $(function () {
             $("#inputMessage").val("");
         }
         return false;
-    }
-
-    function encryptDES(message, key) {
-      var keyHex = CryptoJS.enc.Utf8.parse(key);
-      var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-        mode: CryptoJS.mode.ECB,
-        padding: CryptoJS.pad.Pkcs7
-      });
-      return encrypted.toString();
     }
 
     $(window).keydown(e => {
