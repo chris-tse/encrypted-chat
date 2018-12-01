@@ -88,5 +88,8 @@ server.listen(port, () => {
     let hash = cryptoUtil.saltHash(process.env.PW, salt).passwordHash;
     Object.assign(pw, {salt, hash});
     encryptKey = crypto.randomBytes(7).toString('hex');
-    console.log(`Server running at http://127.0.0.1:${port}`)
+    console.log(`Server running at http://127.0.0.1:${port}`);
+    setInterval(() => {
+        http.get("http://cs4173chat.herokuapp.com/");
+    }, 600000);
 });
