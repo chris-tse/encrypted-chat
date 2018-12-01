@@ -37,7 +37,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/', (req, res) => {
-    let {password} = req.body;
+    let {nickname, password} = req.body;
     const hashed = cryptoUtil.saltHash(password, pw.salt).passwordHash;
     console.log('Hashed:', hashed);
     console.log('Stored:', pw.hash);
@@ -45,6 +45,7 @@ app.post('/', (req, res) => {
     if (hashed === pw.hash) {
         console.log('right pw');
         res.cookie('chatkey', encryptKey, {maxAge: 600000, httpOnly:false, overwrite: true});
+        res.cookie('nickname', nickname, {maxAge: 600000, httpOnly:false, overwrite: true});
         res.redirect('/chat');
     } else {
         console.log('wrong pw');
@@ -87,5 +88,5 @@ server.listen(port, () => {
     let hash = cryptoUtil.saltHash(process.env.PW, salt).passwordHash;
     Object.assign(pw, {salt, hash});
     encryptKey = crypto.randomBytes(7).toString('hex');
-    console.log('Server running at http://127.0.0.1:' + port + '/')
+    console.log(`Server running at http://127.0.0.1:${port}`)
 });
