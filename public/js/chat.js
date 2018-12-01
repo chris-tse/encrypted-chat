@@ -6,25 +6,6 @@ $(function () {
         return v ? v[2] : null;
     }
     
-    const updateTyping = () => {
-        if (connected) {
-            if (!typing) {
-                typing = true;
-                socket.emit('typing');
-            }
-            lastTypingTime = (new Date()).getTime();
-
-            setTimeout(() => {
-                var typingTimer = (new Date()).getTime();
-                var timeDiff = typingTimer - lastTypingTime;
-                if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-                socket.emit('stop typing');
-                typing = false;
-                }
-            }, TYPING_TIMER_LENGTH);
-        }
-    }
-    
     let nickname = getCookie('nickname');
     
     function sendMessage() {
@@ -44,14 +25,8 @@ $(function () {
         
         if (e.which === 13) {
             sendMessage();
-            socket.emit('stop typing');
-            typing = false;
         }
     });
-    
-    $('#inputMessage').on('input', () => {
-        updateTyping();
-    })
     
     let socket = io();
     
@@ -63,4 +38,6 @@ $(function () {
     socket.on('chat message', function(msg){
         $('#messages').append($('<li>').text(`${msg.sender}: ${msg.message}`));
     });
+    
+    
 });
