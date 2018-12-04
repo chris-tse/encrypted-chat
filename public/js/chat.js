@@ -68,6 +68,10 @@ $(document).ready(function () {
         msgContainer.append($('<span class="cipher hidden"></span>').text(msg));
         newMsg.append(msgContainer);
         $('#messages').append(newMsg);
+        
+        $('body, html').animate({
+            scrollTop: $('#messages li:last-child').offset().top + 'px'
+        }, 0);
     });  
 });
 

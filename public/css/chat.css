@@ -98,6 +98,7 @@ form {
 #messages {
     list-style-type: none;
     margin: 0;
+    margin-bottom: 100px;
     padding: 0;
 }
 
