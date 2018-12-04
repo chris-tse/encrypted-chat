@@ -22,3 +22,7 @@ function encryptDES(message, key) {
 //         passwordHash:value
 //     };
 // };
+
+module.exports = {
+    encryptDES,
+}

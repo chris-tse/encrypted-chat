@@ -66,7 +66,8 @@ form {
     border-bottom-right-radius: 0;
     border-right: 1px solid rgb(106, 106, 106);
     font-size: 30px;
-    font-weight: light;
+    font-weight: lighter;
+    vertical-align: super;
 }
 
 .msgContainer {
