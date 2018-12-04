@@ -10,50 +10,6 @@ $(document).ready(function () {
         }
         return false;
     }
-
-    $(window).keydown(e => {
-        if (!(e.ctrlKey || e.metaKey || e.altKey)) {
-            $('#inputMessage').focus();
-        }
-        if (e.which === 13) {
-            $("form").submit();
-            
-        }
-    });
-
-    let socket = io();
-
-    $("form").submit(function (e) {
-        e.preventDefault();
-        let msg = $('#inputMessage').val();
-        sendMessage(msg);
-    });
-    
-    $('#file').change(function() {
-        readURL(this);
-    })
-
-    socket.on('chat message', function(msg){
-        // msg = JSON.parse(msg);
-        // console.log(`Received msg: ${msg}`);
-        let payload = decryptDES(msg, getCookie('chatkey'));
-        let {sender, msg: message} = JSON.parse(payload);
-        // console.log(sender, message);
-        let datetime = new Date().toLocaleString().split(', ').join(' ');
-        let newMsg = $('<li></li>');
-        let msgContainer = $('<div class="msgContainer"></div');
-        msgContainer.append($('<span class="timestamp"></span>').text(`[${datetime}]  `)); 
-        if (message.startsWith('data:image')) {
-            let plain = $('<span class="plain"></span>').text(`${sender}: `);
-            plain.append($('<img class="chatimg" src="' + message + '"/>'));
-            msgContainer.append(plain);
-        } else {
-            msgContainer.append($('<span class="plain"></span>').text(`${sender}: ${message}`));
-        }
-        msgContainer.append($('<span class="cipher hidden"></span>').text(msg));
-        newMsg.append(msgContainer);
-        $('#messages').append(newMsg);
-    });  
     
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -67,5 +23,62 @@ $(document).ready(function () {
             reader.readAsDataURL(input.files[0]);
         }
     }
+    
+    
+
+    $(window).keydown(e => {
+        if (!(e.ctrlKey || e.metaKey || e.altKey)) {
+            $('#inputMessage').focus();
+        }
+        if (e.which === 13) {
+            $("form").submit();
+            
+        }
+    });
+
+    $("form").submit(function (e) {
+        e.preventDefault();
+        let msg = $('#inputMessage').val();
+        sendMessage(msg);
+    });
+
+    $('#file').change(function() {
+        readURL(this);
+    })
+
+    let socket = io();
+    socket.on('chat message', function(msg){
+        // msg = JSON.parse(msg);
+        // console.log(`Received msg: ${msg}`);
+        let payload = decryptDES(msg, getCookie('chatkey'));
+        let {sender, msg: message} = JSON.parse(payload);
+        // console.log(sender, message);
+        let datetime = new Date().toLocaleString().split(', ').join(' ');
+        let newMsg = $('<li></li>');
+        let msgContainer = $('<div class="msgContainer" onclick=swap(this)></div');
+        msgContainer.append($('<span class="timestamp"></span>').text(`[${datetime}]`)); 
+        msgContainer.append($('<span class="nickname"></span>').text(`${sender}:`).append('&nbsp;'));
+        if (message.startsWith('data:image')) {
+            let plain = $('<span class="plain"></span>');
+            plain.append($('<img class="chatimg" src="' + message + '"/>'));
+            msgContainer.append(plain);
+        } else {
+            msgContainer.append($('<span class="plain"></span>').text(`${message}`));
+        }
+        msgContainer.append($('<span class="cipher hidden"></span>').text(msg));
+        newMsg.append(msgContainer);
+        $('#messages').append(newMsg);
+    });  
 });
 
+function swap(e) {
+    console.log(e);
+    console.log($(e).children());
+    if ($(e).children('.plain').hasClass('hidden')) {
+        $(e).children('.plain').removeClass('hidden');
+        $(e).children('.cipher').addClass('hidden');
+    } else {
+        $(e).children('.plain').addClass('hidden');
+        $(e).children('.cipher').removeClass('hidden');
+    }
+}
