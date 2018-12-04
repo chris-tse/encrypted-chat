@@ -18,6 +18,7 @@ $(document).ready(function () {
             reader.onload = function(e) {
                 let dataURL = e.target.result;
                 sendMessage(dataURL);
+                input.value = '';
             }
 
             reader.readAsDataURL(input.files[0]);
