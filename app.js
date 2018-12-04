@@ -39,12 +39,11 @@ app.post('/login', (req, res) => {
 
     if (receivedHash === computedHash) {
         console.log('right pw');
-        // let encryptedChatKey = cryptoUtils.encryptDES(chatkey, process.env.PW).toString();
         let resObj = {chatkey, PW: process.env.PW};
-        console.log('Sending encrypted:')
-        console.log(resObj);
         let payload = cryptoUtils.encryptDES(JSON.stringify(resObj), process.env.PW).toString();
-        console.log(payload);
+        // console.log('Sending encrypted:');
+        // console.log(resObj);
+        // console.log(payload);
         return res.status(200).json({message: 'Correct password', payload});
         // res.cookie('chatkey', encryptKey, {maxAge: 600000, httpOnly:false, overwrite: true});
         // res.cookie('nickname', nickname, {maxAge: 600000, httpOnly:false, overwrite: true});
@@ -72,7 +71,7 @@ io.on('connection', socket => {
     });
     
     socket.on('chat message', msg => {
-        console.log(msg);
+        // console.log(msg);
         io.emit('chat message', msg);
     })
 });
