@@ -1,28 +1,11 @@
-$(function () {
-    const TYPING_TIMER_LENGTH = 400;
-    let typing = false;
-    function getCookie(name) {
-        var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-        return v ? v[2] : null;
-    }
+$(document).ready(function () {
 
     let nickname = getCookie('nickname');
 
-    function encryptDES(message, key) {
-        var keyHex = CryptoJS.enc.Utf8.parse(key);
-        var encrypted = CryptoJS.DES.encrypt(message, keyHex, {
-            mode: CryptoJS.mode.ECB,
-            padding: CryptoJS.pad.Pkcs7
-        });
-        return encrypted.toString();
-    }
-
-    function sendMessage() {
-        let msg = $("#inputMessage").val();
-        var encrypted = encryptDES(msg, getCookie('chatkey'));
+    function sendMessage(msg) {
+        let ciphertext = encryptDES(JSON.stringify({sender: nickname, msg}), getCookie('chatkey')).toString();
         if (msg === undefined || msg.length > 0) {
-            socket.emit("chat message", {sender: nickname, message: msg});
-            socket.emit("chat message", {sender: nickname, message: encrypted});
+            socket.emit('chat message', ciphertext);
             $("#inputMessage").val("");
         }
         return false;
@@ -32,9 +15,9 @@ $(function () {
         if (!(e.ctrlKey || e.metaKey || e.altKey)) {
             $('#inputMessage').focus();
         }
-
         if (e.which === 13) {
-            sendMessage();
+            $("form").submit();
+            
         }
     });
 
@@ -42,11 +25,52 @@ $(function () {
 
     $("form").submit(function (e) {
         e.preventDefault();
-
+        let msg = $('#inputMessage').val();
+        sendMessage(msg);
     });
+    
+    $('#file').change(function() {
+        console.log('triggered 1');
+        console.log(this);
+        readURL(this);
+    })
 
     socket.on('chat message', function(msg){
-        $('#messages').append($('<li>').text(`${msg.sender}: ${msg.message}`));
+        // msg = JSON.parse(msg);
+        console.log(`Received msg: ${msg}`);
+        let payload = decryptDES(msg, getCookie('chatkey'));
+        let {sender, msg: message} = JSON.parse(payload);
+        console.log(sender, message);
+        let datetime = new Date().toLocaleString().split(', ').join(' ');
+        let newMsg = $('<li></li>');
+        let msgContainer = $('<div class="msgContainer"></div');
+        msgContainer.append($('<span class="timestamp"></span>').text(`[${datetime}]  `)); 
+        if (message.startsWith('data:image')) {
+            let plain = $('<span class="plain"></span>').text(`${sender}: `);
+            plain.append($('<img class="chatimg" src="' + message + '"/>'));
+            msgContainer.append(plain);
+        } else {
+            msgContainer.append($('<span class="plain"></span>').text(`${sender}: ${message}`));
+        }
+        msgContainer.append($('<span class="cipher hidden"></span>').text(msg));
+        newMsg.append(msgContainer);
+        $('#messages').append(newMsg);
     });  
+    
+    function readURL(input) {
+        console.log('triggered 2');
+        if (input.files && input.files[0]) {
+            console.log('triggered 3');
+            let reader = new FileReader();
+
+            reader.onload = function(e) {
+                let dataURL = e.target.result;
+                sendMessage(dataURL);
+                // console.log(e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 });
 
