@@ -30,17 +30,15 @@ $(document).ready(function () {
     });
     
     $('#file').change(function() {
-        console.log('triggered 1');
-        console.log(this);
         readURL(this);
     })
 
     socket.on('chat message', function(msg){
         // msg = JSON.parse(msg);
-        console.log(`Received msg: ${msg}`);
+        // console.log(`Received msg: ${msg}`);
         let payload = decryptDES(msg, getCookie('chatkey'));
         let {sender, msg: message} = JSON.parse(payload);
-        console.log(sender, message);
+        // console.log(sender, message);
         let datetime = new Date().toLocaleString().split(', ').join(' ');
         let newMsg = $('<li></li>');
         let msgContainer = $('<div class="msgContainer"></div');
@@ -58,15 +56,12 @@ $(document).ready(function () {
     });  
     
     function readURL(input) {
-        console.log('triggered 2');
         if (input.files && input.files[0]) {
-            console.log('triggered 3');
             let reader = new FileReader();
 
             reader.onload = function(e) {
                 let dataURL = e.target.result;
                 sendMessage(dataURL);
-                // console.log(e.target.result);
             }
 
             reader.readAsDataURL(input.files[0]);

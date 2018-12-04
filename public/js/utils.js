@@ -20,7 +20,7 @@ function deleteCookie(name) { setCookie(name, '', -1); }
  */
 function encryptDES(message, key) {
     let encrypted = CryptoJS.DES.encrypt(message, key);
-    console.log(encrypted.toString());
+    // console.log(encrypted.toString());
     return encrypted.toString();
 }
 
