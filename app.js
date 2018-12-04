@@ -94,6 +94,6 @@ server.listen(port, () => {
     
     // Ping heroku server to keep from sleeping
     setInterval(() => {
-        http.get("http://cs4173chat.herokuapp.com/");
+        http.get("http://cs4173chat2.herokuapp.com/");
     }, 600000);
 });
