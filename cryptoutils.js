@@ -22,9 +22,3 @@ function encryptDES(message, key) {
 //         passwordHash:value
 //     };
 // };
-
-module.exports = {
-    encryptDES,
-}
-
-console.log(module)
