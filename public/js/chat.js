@@ -3,7 +3,7 @@ $(document).ready(function () {
     let nickname = getCookie('nickname');
 
     function sendMessage(msg) {
-        let ciphertext = encryptDES(JSON.stringify({sender: nickname, msg}), getCookie('chatkey')).toString();
+        let ciphertext = encryptDES(JSON.stringify({sender: nickname, msg}), getCookie('password')).toString();
         if (msg === undefined || msg.length > 0) {
             socket.emit('chat message', ciphertext);
             $("#inputMessage").val("");
@@ -49,9 +49,17 @@ $(document).ready(function () {
     let socket = io();
     socket.on('chat message', function(msg){
         // msg = JSON.parse(msg);
-        // console.log(`Received msg: ${msg}`);
-        let payload = decryptDES(msg, getCookie('chatkey'));
-        let {sender, msg: message} = JSON.parse(payload);
+        // console.log(`Received msg: ${msg}`);a
+        let payload, decryptedPayload;
+        try {
+            payload = decryptDES(msg, getCookie('password'));
+            decryptedPayload = JSON.parse(payload); 
+        } catch (error) {
+            // return console.log('Undecryptable message detected');
+            // decryptedPayload = {sender: 'Unknown', msg}
+            return console.log('Undecrytable message detected:', msg);
+        }
+        let {sender, msg: message} = decryptedPayload;
         // console.log(sender, message);
         let datetime = new Date().toLocaleString().split(', ').join(' ');
         let newMsg = $('<li></li>');
@@ -76,8 +84,8 @@ $(document).ready(function () {
 });
 
 function swap(e) {
-    console.log(e);
-    console.log($(e).children());
+    // console.log(e);
+    // console.log($(e).children());
     if ($(e).children('.plain').hasClass('hidden')) {
         $(e).children('.plain').removeClass('hidden');
         $(e).children('.cipher').addClass('hidden');
