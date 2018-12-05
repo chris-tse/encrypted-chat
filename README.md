@@ -3,30 +3,26 @@
 ### CS 4173 Final Project
 Christopher Tse, Charlie Liu, Zachary Connor
 
+This is an application which allows users which share the same password to exchange encrypted messages. 
+
+[Live Demo](https://cs4173chat.herokuapp.com)
+
+## Requirements
+* Node.js 8.11.4 or newer
+* Chrome 70+ (older versions may work; not tested)
+
 ## Development
 
-### Setting up the project
+### Setting up the Project
 
-Clone the project to your computer by downloading the zip or using git. Install the required packages and run the server:  
+Clone the project to your computer by downloading the zip or using git and install the required packages. Then the server can be started:  
 ```
 $ git clone https://github.com/chris-tse/encrypted-chat
+$ cd encrypted-chat
 $ npm install
 $ npm start
 ```
 
-You will need to set a password first before starting the server the first time. See instructions below.
+### Using the Application
 
-### Setting a login password
-
-The included `setpassword.js` script can be used to set the password that is checked by the server when a user wants to log in to the chat. It can be run as follows:
-
-```
-$ ./setpassword --pw <password>
-```
-If the path to the shebang is not correct on your system, either change it in the script or run it with the node command:
-
-```
-$ node setpassword --pw <password>
-```
-
-The salt and hash of the password will be written to `password.json` which the server will check against on login. If the password is changed, the server will need to be restarted.
+Users can join the chat application by entering a nickname to identify themselves and a password which would be the shared password between Alice and Bob. Text messages can be sent by typing into the input box and pressing Enter. Images can be sent by clicking the plus sign and opening a file from the file browser or dragging an image from the desktop onto the plus sign. 
