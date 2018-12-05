@@ -3,7 +3,7 @@
 ### CS 4173 Final Project
 Christopher Tse, Charlie Liu, Zachary Connor
 
-This is an application which allows users which share the same password to exchange encrypted messages. 
+This is an application which allows users which share the same password to exchange 56-bit encrypted messages. This application assumes no secure connections from the time the message is sent to when it's received by the intended receipient and therefore all encryption/decryption is performed on the client with the server playing no part in the security or storing keys in the event that it is compromised.
 
 [Live Demo](https://cs4173chat.herokuapp.com)
 
