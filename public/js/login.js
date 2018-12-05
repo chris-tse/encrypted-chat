@@ -5,8 +5,8 @@ $('#login').submit(e => {
     
     let nickname = $('#nickname').val();
     let pw = $('#password').val();
-    setCookie('nickname', nickname, 1);
-    setCookie('password', pw, 1);
+    localStorage.setItem('nickname', nickname);
+    localStorage.setItem('password', pw);
     window.location.href = '/chat';
     
     // let hashedPW = CryptoJS.SHA512(pw).toString();

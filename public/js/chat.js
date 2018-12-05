@@ -1,9 +1,11 @@
 $(document).ready(function () {
-
-    let nickname = getCookie('nickname');
+    if (!localStorage.getItem('password')) {
+        window.location.href = '/';
+    }
+    let nickname = localStorage.getItem('nickname');
 
     function sendMessage(msg) {
-        let ciphertext = encryptDES(JSON.stringify({sender: nickname, msg}), getCookie('password')).toString();
+        let ciphertext = encryptDES(JSON.stringify({sender: nickname, msg}), localStorage.getItem('password')).toString();
         if (msg === undefined || msg.length > 0) {
             socket.emit('chat message', ciphertext);
             $("#inputMessage").val("");
@@ -52,7 +54,7 @@ $(document).ready(function () {
         // console.log(`Received msg: ${msg}`);a
         let payload, decryptedPayload;
         try {
-            payload = decryptDES(msg, getCookie('password'));
+            payload = decryptDES(msg, localStorage.getItem('password'));
             decryptedPayload = JSON.parse(payload); 
         } catch (error) {
             // return console.log('Undecryptable message detected');
