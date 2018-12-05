@@ -19,7 +19,7 @@ function deleteCookie(name) { setCookie(name, '', -1); }
  * @returns {string} Ciphertext output from cipher
  */
 function encryptDES(message, key) {
-    let encrypted = CryptoJS.DES.encrypt(message, key);
+    let encrypted = CryptoJS.TripleDES.encrypt(message, key);
     // console.log(encrypted.toString());
     return encrypted.toString();
 }
@@ -31,6 +31,6 @@ function encryptDES(message, key) {
 * @returns {string} Plaintext encoded in UTF-8
 */
 function decryptDES(ciphertext, key) {
-    let decrypted = CryptoJS.DES.decrypt(ciphertext, key);
+    let decrypted = CryptoJS.TripleDES.decrypt(ciphertext, key);
     return decrypted.toString(CryptoJS.enc.Utf8);
 }

@@ -8,7 +8,7 @@ const CryptoJS = require('crypto-js');
 * @returns {string} Ciphertext output from cipher
 */
 function encryptDES(message, key) {
-    let encrypted = CryptoJS.DES.encrypt(message, key);
+    let encrypted = CryptoJS.TripleDES.encrypt(message, key);
     // console.log(encryptedMsgObj.toString());
     return encrypted.toString();
 }
