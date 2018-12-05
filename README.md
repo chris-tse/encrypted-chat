@@ -15,11 +15,14 @@ This is an application which allows users which share the same password to excha
 
 ### Setting up the Project
 
-Clone the project to your computer by downloading the zip or using git and install the required packages. Then the server can be started:  
+Clone the project to your computer by downloading the zip or using git and install the required packages.
+
+Change to the `pw-only` branch since the approach we chose is implemented in that branch. Then the server can be started:  
 ```
 $ git clone https://github.com/chris-tse/encrypted-chat
 $ cd encrypted-chat
 $ npm install
+$ git checkout pw-only
 $ npm start
 ```
 
