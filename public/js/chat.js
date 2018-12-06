@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    // Go back to login page if no password set
     if (!localStorage.getItem('password')) {
         window.location.href = '/';
     }
@@ -34,7 +35,6 @@ $(document).ready(function () {
         }
         if (e.which === 13) {
             $("form").submit();
-            
         }
     });
 
@@ -50,19 +50,19 @@ $(document).ready(function () {
 
     let socket = io();
     socket.on('chat message', function(msg){
-        // msg = JSON.parse(msg);
-        // console.log(`Received msg: ${msg}`);a
         let payload, decryptedPayload;
+        
         try {
             payload = decryptDES(msg, localStorage.getItem('password'));
             decryptedPayload = JSON.parse(payload); 
         } catch (error) {
-            // return console.log('Undecryptable message detected');
-            // decryptedPayload = {sender: 'Unknown', msg}
+            // Don't continue processing if cannot decrypt
             return console.log('Undecrytable message detected:', msg);
         }
+        
         let {sender, msg: message} = decryptedPayload;
-        // console.log(sender, message);
+
+        // Build new chat message entry
         let datetime = new Date().toLocaleString().split(', ').join(' ');
         let newMsg = $('<li></li>');
         let msgContainer = $('<div class="msgContainer" onclick=swap(this)></div');
@@ -79,6 +79,7 @@ $(document).ready(function () {
         newMsg.append(msgContainer);
         $('#messages').append(newMsg);
         
+        // Scroll to bottom when new message arrives
         $('body, html').animate({
             scrollTop: $('#messages li:last-child').offset().top + 'px'
         }, 0);
