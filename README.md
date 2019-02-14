@@ -19,10 +19,9 @@ Clone the project to your computer by downloading the zip or using git and insta
 
 Change to the `pw-only` branch since the approach we chose is implemented in that branch. Then the server can be started:  
 ```
-$ git clone https://github.com/chris-tse/encrypted-chat
+$ git clone https://github.com/chris-tse/totally-secure-chat
 $ cd encrypted-chat
 $ npm install
-$ git checkout pw-only
 $ npm start
 ```
 
