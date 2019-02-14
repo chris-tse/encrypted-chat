@@ -5,6 +5,10 @@ $(document).ready(function () {
     }
     let nickname = localStorage.getItem('nickname');
 
+    /**
+     * Sends a message to web socket emitter and clears the input box
+     * @param {string} msg Ciphertext of message or image to send 
+     */
     function sendMessage(msg) {
         let ciphertext = encryptDES(JSON.stringify({sender: nickname, msg}), localStorage.getItem('password')).toString();
         if (msg === undefined || msg.length > 0) {
@@ -14,6 +18,10 @@ $(document).ready(function () {
         return false;
     }
     
+    /**
+     * Reads in image from input field and parses to base64 data URL
+     * @param input Input form field for initial upload of image
+     */
     function readURL(input) {
         if (input.files && input.files[0]) {
             let reader = new FileReader();
@@ -29,6 +37,7 @@ $(document).ready(function () {
     
     
 
+    // Focus chat box on type unless a modifier key is pressed
     $(window).keydown(e => {
         if (!(e.ctrlKey || e.metaKey || e.altKey)) {
             $('#inputMessage').focus();
@@ -44,6 +53,7 @@ $(document).ready(function () {
         sendMessage(msg);
     });
 
+    // Listen for image upload
     $('#file').change(function() {
         readURL(this);
     })
@@ -53,6 +63,7 @@ $(document).ready(function () {
         let payload, decryptedPayload;
         
         try {
+            // Attempt decrypt using password stored in localStorage
             payload = decryptDES(msg, localStorage.getItem('password'));
             decryptedPayload = JSON.parse(payload); 
         } catch (error) {

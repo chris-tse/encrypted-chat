@@ -1,4 +1,3 @@
-const crypto = require('crypto');
 const CryptoJS = require('crypto-js');
 
 /**
@@ -9,19 +8,8 @@ const CryptoJS = require('crypto-js');
 */
 function encryptDES(message, key) {
     let encrypted = CryptoJS.TripleDES.encrypt(message, key);
-    // console.log(encryptedMsgObj.toString());
     return encrypted.toString();
 }
-
-// function saltHash(password, salt) {
-//     const hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
-//     hash.update(password);
-//     const value = hash.digest('hex');
-//     return {
-//         salt:salt,
-//         passwordHash:value
-//     };
-// };
 
 module.exports = {
     encryptDES,
